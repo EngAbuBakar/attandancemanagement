@@ -29,7 +29,7 @@
       "fieldType": "String",
       "fieldValidateRules": ["required", "minlength", "maxlength"],
       "fieldValidateRulesMaxlength": 10,
-      "fieldValidateRulesMinlength": 3
+      "fieldValidateRulesMinlength": 2
     }
   ],
   "fieldsContainOwnerReference": false,
