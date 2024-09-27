@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20240927143000"
+  },
+  "changelogDate": "20240927143000",
+  "enableEntityAudit": true,
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": 50,
+      "fieldValidateRulesMinlength": 2
+    },
+    {
+      "fieldName": "age",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": 120,
+      "fieldValidateRulesMin": 1
+    },
+    {
+      "fieldName": "rollNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": 10,
+      "fieldValidateRulesMinlength": 3
+    }
+  ],
+  "fieldsContainOwnerReference": false,
+  "jpaMetamodelFiltering": true,
+  "name": "Student",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
