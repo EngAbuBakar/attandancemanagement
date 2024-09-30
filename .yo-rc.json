@@ -15,7 +15,7 @@
     "enableHibernateCache": false,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
-    "entities": [],
+    "entities": ["Student"],
     "feignClient": null,
     "jhipsterVersion": "8.7.1",
     "jwtSecretKey": "YmVhYmU0MDhlOGRhY2ZlMTcyMWRkMzI1Y2E0NTVjNGY3ZWFmZTYxMzNlMzQ5OTljNTVlMmE5ODg5OTRlMWJiYWE3NTRlOWVjYjNhYjNlZmNhYzZhODcxMGI5YjVlNTdiZmU5YzkwNTFhMzk3ZmYzZjRlMTg1MGJhZmMyYWE1OWY=",
