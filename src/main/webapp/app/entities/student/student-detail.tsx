@@ -27,7 +27,7 @@ export const StudentDetail = () => {
         <dl className="jh-entity-details">
           <dt>
             <span id="id">
-              <Translate contentKey="schoolManagementApp.student.id">Id</Translate>
+              <Translate contentKey="global.field.id">ID</Translate>
             </span>
           </dt>
           <dd>{studentEntity.id}</dd>
@@ -44,11 +44,17 @@ export const StudentDetail = () => {
           </dt>
           <dd>{studentEntity.age}</dd>
           <dt>
-            <span id="rollNumber">
-              <Translate contentKey="schoolManagementApp.student.rollNumber">Roll Number</Translate>
+            <span id="rollNo">
+              <Translate contentKey="schoolManagementApp.student.rollNo">Roll No</Translate>
             </span>
           </dt>
-          <dd>{studentEntity.rollNumber}</dd>
+          <dd>{studentEntity.rollNo}</dd>
+          <dt>
+            <span id="address">
+              <Translate contentKey="schoolManagementApp.student.address">Address</Translate>
+            </span>
+          </dt>
+          <dd>{studentEntity.address}</dd>
         </dl>
         <Button tag={Link} to="/student" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

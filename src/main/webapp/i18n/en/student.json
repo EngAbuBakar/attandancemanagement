@@ -17,10 +17,11 @@
       "detail": {
         "title": "Student"
       },
-      "id": "Id",
+      "id": "ID",
       "name": "Name",
       "age": "Age",
-      "rollNumber": "Roll Number"
+      "rollNo": "Roll No",
+      "address": "Address"
     }
   }
 }

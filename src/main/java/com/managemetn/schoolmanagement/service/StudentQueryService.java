@@ -49,12 +49,12 @@ public class StudentQueryService extends QueryService<Student> {
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the number of matching entities.
      */
-    @Transactional(readOnly = true)
-    public long countByCriteria(StudentCriteria criteria) {
-        LOG.debug("count by criteria : {}", criteria);
-        final Specification<Student> specification = createSpecification(criteria);
-        return studentRepository.count(specification);
-    }
+    //    @Transactional(readOnly = true)
+    //    public long countByCriteria(StudentCriteria criteria) {
+    //        LOG.debug("count by criteria : {}", criteria);
+    //        final Specification<Student> specification = createSpecification(criteria);
+    //        return studentRepository.count(specification);
+    //    }
 
     /**
      * Function to convert {@link StudentCriteria} to a {@link Specification}
@@ -65,21 +65,21 @@ public class StudentQueryService extends QueryService<Student> {
         Specification<Student> specification = Specification.where(null);
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
-            if (criteria.getDistinct() != null) {
-                specification = specification.and(distinct(criteria.getDistinct()));
-            }
-            if (criteria.getId() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getId(), Student_.id));
-            }
-            if (criteria.getName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getName(), Student_.name));
-            }
-            if (criteria.getAge() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAge(), Student_.age));
-            }
-            if (criteria.getRollNumber() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getRollNumber(), Student_.rollNumber));
-            }
+            //            if (criteria.getDistinct() != null) {
+            //                specification = specification.and(distinct(criteria.getDistinct()));
+            //            }
+            //            if (criteria.getId() != null) {
+            //                specification = specification.and(buildRangeSpecification(criteria.getId(), Student_.id));
+            //            }
+            //            if (criteria.getName() != null) {
+            //                specification = specification.and(buildStringSpecification(criteria.getName(), Student_.name));
+            //            }
+            //            if (criteria.getAge() != null) {
+            //                specification = specification.and(buildRangeSpecification(criteria.getAge(), Student_.age));
+            //            }
+            //            if (criteria.getRollNumber() != null) {
+            //                specification = specification.and(buildStringSpecification(criteria.getRollNumber(), Student_.rollNumber));
+            //            }
         }
         return specification;
     }

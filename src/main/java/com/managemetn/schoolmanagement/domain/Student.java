@@ -14,26 +14,25 @@ public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 50)
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Min(value = 1)
-    @Max(value = 120)
-    @Column(name = "age")
+    @NotNull
+    @Column(name = "age", nullable = false)
     private Integer age;
 
     @NotNull
-    @Size(min = 3, max = 10)
-    @Column(name = "roll_number", length = 10, nullable = false)
-    private String rollNumber;
+    @Column(name = "roll_no", nullable = false, unique = true)
+    private String rollNo;
+
+    @Column(name = "address")
+    private String address;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -76,17 +75,30 @@ public class Student implements Serializable {
         this.age = age;
     }
 
-    public String getRollNumber() {
-        return this.rollNumber;
+    public String getRollNo() {
+        return this.rollNo;
     }
 
-    public Student rollNumber(String rollNumber) {
-        this.setRollNumber(rollNumber);
+    public Student rollNo(String rollNo) {
+        this.setRollNo(rollNo);
         return this;
     }
 
-    public void setRollNumber(String rollNumber) {
-        this.rollNumber = rollNumber;
+    public void setRollNo(String rollNo) {
+        this.rollNo = rollNo;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public Student address(String address) {
+        this.setAddress(address);
+        return this;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -115,7 +127,8 @@ public class Student implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", age=" + getAge() +
-            ", rollNumber='" + getRollNumber() + "'" +
+            ", rollNo='" + getRollNo() + "'" +
+            ", address='" + getAddress() + "'" +
             "}";
     }
 }

@@ -20,9 +20,13 @@ spring:
   config:
     activate:
       on-profile: '!api-docs'
+
 springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
   api-docs:
-    enabled: false
+    enabled: true
 ---
 management:
   endpoints:

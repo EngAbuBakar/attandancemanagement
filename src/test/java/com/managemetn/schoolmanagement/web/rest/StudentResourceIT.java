@@ -37,10 +37,12 @@ class StudentResourceIT {
 
     private static final Integer DEFAULT_AGE = 1;
     private static final Integer UPDATED_AGE = 2;
-    private static final Integer SMALLER_AGE = 1 - 1;
 
-    private static final String DEFAULT_ROLL_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_ROLL_NUMBER = "BBBBBBBBBB";
+    private static final String DEFAULT_ROLL_NO = "AAAAAAAAAA";
+    private static final String UPDATED_ROLL_NO = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/students";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -71,7 +73,7 @@ class StudentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Student createEntity() {
-        return new Student().name(DEFAULT_NAME).age(DEFAULT_AGE).rollNumber(DEFAULT_ROLL_NUMBER);
+        return new Student().name(DEFAULT_NAME).age(DEFAULT_AGE).rollNo(DEFAULT_ROLL_NO).address(DEFAULT_ADDRESS);
     }
 
     /**
@@ -81,7 +83,7 @@ class StudentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Student createUpdatedEntity() {
-        return new Student().name(UPDATED_NAME).age(UPDATED_AGE).rollNumber(UPDATED_ROLL_NUMBER);
+        return new Student().name(UPDATED_NAME).age(UPDATED_AGE).rollNo(UPDATED_ROLL_NO).address(UPDATED_ADDRESS);
     }
 
     @BeforeEach
@@ -154,10 +156,26 @@ class StudentResourceIT {
 
     @Test
     @Transactional
-    void checkRollNumberIsRequired() throws Exception {
+    void checkAgeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        student.setRollNumber(null);
+        student.setAge(null);
+
+        // Create the Student, which fails.
+
+        restStudentMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(student)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkRollNoIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        student.setRollNo(null);
 
         // Create the Student, which fails.
 
@@ -182,7 +200,8 @@ class StudentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(student.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].age").value(hasItem(DEFAULT_AGE)))
-            .andExpect(jsonPath("$.[*].rollNumber").value(hasItem(DEFAULT_ROLL_NUMBER)));
+            .andExpect(jsonPath("$.[*].rollNo").value(hasItem(DEFAULT_ROLL_NO)))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)));
     }
 
     @Test
@@ -199,237 +218,8 @@ class StudentResourceIT {
             .andExpect(jsonPath("$.id").value(student.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.age").value(DEFAULT_AGE))
-            .andExpect(jsonPath("$.rollNumber").value(DEFAULT_ROLL_NUMBER));
-    }
-
-    @Test
-    @Transactional
-    void getStudentsByIdFiltering() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        Long id = student.getId();
-
-        defaultStudentFiltering("id.equals=" + id, "id.notEquals=" + id);
-
-        defaultStudentFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
-
-        defaultStudentFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByNameIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where name equals to
-        defaultStudentFiltering("name.equals=" + DEFAULT_NAME, "name.equals=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByNameIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where name in
-        defaultStudentFiltering("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME, "name.in=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByNameIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where name is not null
-        defaultStudentFiltering("name.specified=true", "name.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByNameContainsSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where name contains
-        defaultStudentFiltering("name.contains=" + DEFAULT_NAME, "name.contains=" + UPDATED_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByNameNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where name does not contain
-        defaultStudentFiltering("name.doesNotContain=" + UPDATED_NAME, "name.doesNotContain=" + DEFAULT_NAME);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age equals to
-        defaultStudentFiltering("age.equals=" + DEFAULT_AGE, "age.equals=" + UPDATED_AGE);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age in
-        defaultStudentFiltering("age.in=" + DEFAULT_AGE + "," + UPDATED_AGE, "age.in=" + UPDATED_AGE);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age is not null
-        defaultStudentFiltering("age.specified=true", "age.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age is greater than or equal to
-        defaultStudentFiltering("age.greaterThanOrEqual=" + DEFAULT_AGE, "age.greaterThanOrEqual=" + (DEFAULT_AGE + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age is less than or equal to
-        defaultStudentFiltering("age.lessThanOrEqual=" + DEFAULT_AGE, "age.lessThanOrEqual=" + SMALLER_AGE);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsLessThanSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age is less than
-        defaultStudentFiltering("age.lessThan=" + (DEFAULT_AGE + 1), "age.lessThan=" + DEFAULT_AGE);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByAgeIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where age is greater than
-        defaultStudentFiltering("age.greaterThan=" + SMALLER_AGE, "age.greaterThan=" + DEFAULT_AGE);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByRollNumberIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where rollNumber equals to
-        defaultStudentFiltering("rollNumber.equals=" + DEFAULT_ROLL_NUMBER, "rollNumber.equals=" + UPDATED_ROLL_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByRollNumberIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where rollNumber in
-        defaultStudentFiltering("rollNumber.in=" + DEFAULT_ROLL_NUMBER + "," + UPDATED_ROLL_NUMBER, "rollNumber.in=" + UPDATED_ROLL_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByRollNumberIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where rollNumber is not null
-        defaultStudentFiltering("rollNumber.specified=true", "rollNumber.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByRollNumberContainsSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where rollNumber contains
-        defaultStudentFiltering("rollNumber.contains=" + DEFAULT_ROLL_NUMBER, "rollNumber.contains=" + UPDATED_ROLL_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllStudentsByRollNumberNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedStudent = studentRepository.saveAndFlush(student);
-
-        // Get all the studentList where rollNumber does not contain
-        defaultStudentFiltering("rollNumber.doesNotContain=" + UPDATED_ROLL_NUMBER, "rollNumber.doesNotContain=" + DEFAULT_ROLL_NUMBER);
-    }
-
-    private void defaultStudentFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
-        defaultStudentShouldBeFound(shouldBeFound);
-        defaultStudentShouldNotBeFound(shouldNotBeFound);
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is returned.
-     */
-    private void defaultStudentShouldBeFound(String filter) throws Exception {
-        restStudentMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(student.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].age").value(hasItem(DEFAULT_AGE)))
-            .andExpect(jsonPath("$.[*].rollNumber").value(hasItem(DEFAULT_ROLL_NUMBER)));
-
-        // Check, that the count call also returns 1
-        restStudentMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(content().string("1"));
-    }
-
-    /**
-     * Executes the search, and checks that the default entity is not returned.
-     */
-    private void defaultStudentShouldNotBeFound(String filter) throws Exception {
-        restStudentMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
-
-        // Check, that the count call also returns 0
-        restStudentMockMvc
-            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(content().string("0"));
+            .andExpect(jsonPath("$.rollNo").value(DEFAULT_ROLL_NO))
+            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS));
     }
 
     @Test
@@ -451,7 +241,7 @@ class StudentResourceIT {
         Student updatedStudent = studentRepository.findById(student.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedStudent are not directly saved in db
         em.detach(updatedStudent);
-        updatedStudent.name(UPDATED_NAME).age(UPDATED_AGE).rollNumber(UPDATED_ROLL_NUMBER);
+        updatedStudent.name(UPDATED_NAME).age(UPDATED_AGE).rollNo(UPDATED_ROLL_NO).address(UPDATED_ADDRESS);
 
         restStudentMockMvc
             .perform(
@@ -527,7 +317,7 @@ class StudentResourceIT {
         Student partialUpdatedStudent = new Student();
         partialUpdatedStudent.setId(student.getId());
 
-        partialUpdatedStudent.name(UPDATED_NAME);
+        partialUpdatedStudent.age(UPDATED_AGE).rollNo(UPDATED_ROLL_NO).address(UPDATED_ADDRESS);
 
         restStudentMockMvc
             .perform(
@@ -555,7 +345,7 @@ class StudentResourceIT {
         Student partialUpdatedStudent = new Student();
         partialUpdatedStudent.setId(student.getId());
 
-        partialUpdatedStudent.name(UPDATED_NAME).age(UPDATED_AGE).rollNumber(UPDATED_ROLL_NUMBER);
+        partialUpdatedStudent.name(UPDATED_NAME).age(UPDATED_AGE).rollNo(UPDATED_ROLL_NO).address(UPDATED_ADDRESS);
 
         restStudentMockMvc
             .perform(

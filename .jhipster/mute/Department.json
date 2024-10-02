@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20241001000000"
+  },
+  "changelogDate": "20241001000000",
+  "clientRootFolder": "",
+  "dto": "mapstruct",
+  "enableEntityAudit": true,
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldTransient": true,
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lastModifiedDate",
+      "fieldTransient": true,
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldTransient": true,
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldTransient": true,
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Department",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass",
+  "skipUi": true
+}

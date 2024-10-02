@@ -2,9 +2,7 @@ package com.managemetn.schoolmanagement.web.rest;
 
 import com.managemetn.schoolmanagement.domain.Student;
 import com.managemetn.schoolmanagement.repository.StudentRepository;
-import com.managemetn.schoolmanagement.service.StudentQueryService;
 import com.managemetn.schoolmanagement.service.StudentService;
-import com.managemetn.schoolmanagement.service.criteria.StudentCriteria;
 import com.managemetn.schoolmanagement.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -44,12 +42,9 @@ public class StudentResource {
 
     private final StudentRepository studentRepository;
 
-    private final StudentQueryService studentQueryService;
-
-    public StudentResource(StudentService studentService, StudentRepository studentRepository, StudentQueryService studentQueryService) {
+    public StudentResource(StudentService studentService, StudentRepository studentRepository) {
         this.studentService = studentService;
         this.studentRepository = studentRepository;
-        this.studentQueryService = studentQueryService;
     }
 
     /**
@@ -144,31 +139,14 @@ public class StudentResource {
      * {@code GET  /students} : get all the students.
      *
      * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of students in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Student>> getAllStudents(
-        StudentCriteria criteria,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable
-    ) {
-        LOG.debug("REST request to get Students by criteria: {}", criteria);
-
-        Page<Student> page = studentQueryService.findByCriteria(criteria, pageable);
+    public ResponseEntity<List<Student>> getAllStudents(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        LOG.debug("REST request to get a page of Students");
+        Page<Student> page = studentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /students/count} : count all the students.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
-    @GetMapping("/count")
-    public ResponseEntity<Long> countStudents(StudentCriteria criteria) {
-        LOG.debug("REST request to count Students by criteria: {}", criteria);
-        return ResponseEntity.ok().body(studentQueryService.countByCriteria(criteria));
     }
 
     /**

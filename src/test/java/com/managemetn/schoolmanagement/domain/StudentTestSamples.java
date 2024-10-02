@@ -12,11 +12,11 @@ public class StudentTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static Student getStudentSample1() {
-        return new Student().id(1L).name("name1").age(1).rollNumber("rollNumber1");
+        return new Student().id(1L).name("name1").age(1).rollNo("rollNo1").address("address1");
     }
 
     public static Student getStudentSample2() {
-        return new Student().id(2L).name("name2").age(2).rollNumber("rollNumber2");
+        return new Student().id(2L).name("name2").age(2).rollNo("rollNo2").address("address2");
     }
 
     public static Student getStudentRandomSampleGenerator() {
@@ -24,6 +24,7 @@ public class StudentTestSamples {
             .id(longCount.incrementAndGet())
             .name(UUID.randomUUID().toString())
             .age(intCount.incrementAndGet())
-            .rollNumber(UUID.randomUUID().toString());
+            .rollNo(UUID.randomUUID().toString())
+            .address(UUID.randomUUID().toString());
     }
 }

@@ -49,7 +49,8 @@ public class StudentAsserts {
             .as("Verify Student relevant properties")
             .satisfies(e -> assertThat(e.getName()).as("check name").isEqualTo(actual.getName()))
             .satisfies(e -> assertThat(e.getAge()).as("check age").isEqualTo(actual.getAge()))
-            .satisfies(e -> assertThat(e.getRollNumber()).as("check rollNumber").isEqualTo(actual.getRollNumber()));
+            .satisfies(e -> assertThat(e.getRollNo()).as("check rollNo").isEqualTo(actual.getRollNo()))
+            .satisfies(e -> assertThat(e.getAddress()).as("check address").isEqualTo(actual.getAddress()));
     }
 
     /**

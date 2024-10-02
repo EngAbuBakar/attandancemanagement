@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Col, Row } from 'reactstrap';
-import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
+import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { createEntity, getEntity, reset, updateEntity } from './student.reducer';
+import { createEntity, getEntity, reset, updateEntity } from './department.reducer';
 
-export const StudentUpdate = () => {
+export const DepartmentUpdate = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -16,13 +17,13 @@ export const StudentUpdate = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  const studentEntity = useAppSelector(state => state.student.entity);
-  const loading = useAppSelector(state => state.student.loading);
-  const updating = useAppSelector(state => state.student.updating);
-  const updateSuccess = useAppSelector(state => state.student.updateSuccess);
+  const departmentEntity = useAppSelector(state => state.department.entity);
+  const loading = useAppSelector(state => state.department.loading);
+  const updating = useAppSelector(state => state.department.updating);
+  const updateSuccess = useAppSelector(state => state.department.updateSuccess);
 
   const handleClose = () => {
-    navigate(`/student${location.search}`);
+    navigate(`/department${location.search}`);
   };
 
   useEffect(() => {
@@ -43,12 +44,11 @@ export const StudentUpdate = () => {
     if (values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
-    if (values.age !== undefined && typeof values.age !== 'number') {
-      values.age = Number(values.age);
-    }
+    values.createdDate = convertDateTimeToServer(values.createdDate);
+    values.lastModifiedDate = convertDateTimeToServer(values.lastModifiedDate);
 
     const entity = {
-      ...studentEntity,
+      ...departmentEntity,
       ...values,
     };
 
@@ -61,17 +61,22 @@ export const StudentUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          createdDate: displayDefaultDateTime(),
+          lastModifiedDate: displayDefaultDateTime(),
+        }
       : {
-          ...studentEntity,
+          ...departmentEntity,
+          createdDate: convertDateTimeFromServer(departmentEntity.createdDate),
+          lastModifiedDate: convertDateTimeFromServer(departmentEntity.lastModifiedDate),
         };
 
   return (
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="schoolManagementApp.student.home.createOrEditLabel" data-cy="StudentCreateUpdateHeading">
-            <Translate contentKey="schoolManagementApp.student.home.createOrEditLabel">Create or edit a Student</Translate>
+          <h2 id="schoolManagementApp.department.home.createOrEditLabel" data-cy="DepartmentCreateUpdateHeading">
+            <Translate contentKey="schoolManagementApp.department.home.createOrEditLabel">Create or edit a Department</Translate>
           </h2>
         </Col>
       </Row>
@@ -86,14 +91,14 @@ export const StudentUpdate = () => {
                   name="id"
                   required
                   readOnly
-                  id="student-id"
+                  id="department-id"
                   label={translate('global.field.id')}
                   validate={{ required: true }}
                 />
               ) : null}
               <ValidatedField
-                label={translate('schoolManagementApp.student.name')}
-                id="student-name"
+                label={translate('schoolManagementApp.department.name')}
+                id="department-name"
                 name="name"
                 data-cy="name"
                 type="text"
@@ -102,34 +107,46 @@ export const StudentUpdate = () => {
                 }}
               />
               <ValidatedField
-                label={translate('schoolManagementApp.student.age')}
-                id="student-age"
-                name="age"
-                data-cy="age"
+                label={translate('schoolManagementApp.department.description')}
+                id="department-description"
+                name="description"
+                data-cy="description"
                 type="text"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  validate: v => isNumber(v) || translate('entity.validation.number'),
-                }}
               />
               <ValidatedField
-                label={translate('schoolManagementApp.student.rollNo')}
-                id="student-rollNo"
-                name="rollNo"
-                data-cy="rollNo"
-                type="text"
+                label={translate('schoolManagementApp.department.createdDate')}
+                id="department-createdDate"
+                name="createdDate"
+                data-cy="createdDate"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
                 }}
               />
               <ValidatedField
-                label={translate('schoolManagementApp.student.address')}
-                id="student-address"
-                name="address"
-                data-cy="address"
+                label={translate('schoolManagementApp.department.lastModifiedDate')}
+                id="department-lastModifiedDate"
+                name="lastModifiedDate"
+                data-cy="lastModifiedDate"
+                type="datetime-local"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+              <ValidatedField
+                label={translate('schoolManagementApp.department.createdBy')}
+                id="department-createdBy"
+                name="createdBy"
+                data-cy="createdBy"
                 type="text"
               />
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/student" replace color="info">
+              <ValidatedField
+                label={translate('schoolManagementApp.department.lastModifiedBy')}
+                id="department-lastModifiedBy"
+                name="lastModifiedBy"
+                data-cy="lastModifiedBy"
+                type="text"
+              />
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/department" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -150,4 +167,4 @@ export const StudentUpdate = () => {
   );
 };
 
-export default StudentUpdate;
+export default DepartmentUpdate;
