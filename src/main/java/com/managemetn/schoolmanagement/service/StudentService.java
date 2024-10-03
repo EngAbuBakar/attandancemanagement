@@ -107,7 +107,7 @@ public class StudentService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        LOG.debug("Request to delete Student : {}", id);
+        LOG.debug("Request to delete Student by id : {}", id);
         studentRepository.deleteById(id);
     }
 }
