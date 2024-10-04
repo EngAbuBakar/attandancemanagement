@@ -10,7 +10,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "library")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Library implements Serializable {
+public class Library extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
