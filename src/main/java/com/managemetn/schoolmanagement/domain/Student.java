@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "student")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Student implements Serializable {
+public class Student extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

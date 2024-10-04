@@ -11,7 +11,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "department")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Department implements Serializable {
+public class Department extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
