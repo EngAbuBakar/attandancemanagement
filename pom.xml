@@ -296,6 +296,13 @@
             <artifactId>testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.28</version> <!-- Use the latest version -->
+        <scope>provided</scope>
+      </dependency>
     </dependencies>
 
     <build>
@@ -441,6 +448,11 @@
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
                             </path>
+                          <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.28</version>
+                          </path>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
