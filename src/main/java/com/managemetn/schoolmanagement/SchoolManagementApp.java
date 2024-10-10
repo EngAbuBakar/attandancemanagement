@@ -23,7 +23,7 @@ import tech.jhipster.config.JHipsterConstants;
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class SchoolManagementApp {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SchoolManagementApp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SchoolManagementApp.class.getName());
 
     private final Environment env;
 
